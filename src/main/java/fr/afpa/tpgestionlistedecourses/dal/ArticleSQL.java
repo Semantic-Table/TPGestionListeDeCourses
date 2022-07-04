@@ -1,6 +1,7 @@
 package fr.afpa.tpgestionlistedecourses.dal;
 
 import fr.afpa.tpgestionlistedecourses.bo.Article;
+import fr.afpa.tpgestionlistedecourses.bo.Liste;
 
 
 import java.sql.Connection;
@@ -35,6 +36,43 @@ public class ArticleSQL {
                     "SELECT ID_article, nom FROM article where ID_article = ?"
             );
             pstmt.setInt(1, ID_article);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Article article = new Article(rs.getInt("ID_article"), rs.getString("nom"));
+                return article;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    public Article selectOne(String nom) {
+        try {
+            Connection connection = ConnectionProvider.getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(
+                    "SELECT ID_article, nom FROM article where nom = ?"
+            );
+            pstmt.setString(1, nom);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Article article = new Article(rs.getInt("ID_article"), rs.getString("nom"));
+                return article;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    public Article selectLast() {
+        try {
+            Connection connection = ConnectionProvider.getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(
+                    "SELECT ID_article, nom FROM article ORDER BY ID_article desc LIMIT 1"
+            );
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Article article = new Article(rs.getInt("ID_article"), rs.getString("nom"));
