@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="TPGestionListeDeCourses">
+    <output-path>$PROJECT_DIR$/out/artifacts/TPGestionListeDeCourses</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="TPGestionListeDeCourses" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="TPGestionListeDeCourses/web/Web" />
+    </root>
+  </artifact>
+</component>
