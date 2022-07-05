@@ -22,13 +22,17 @@ public class Accueil extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String nom = request.getParameter("nom");
-        ListeSQL listeSQL = new ListeSQL();
-        listeSQL.delete(nom);
+       if (request.getParameter("delete").equals("true")){
+           System.out.println("test");
+           String nom = request.getParameter("nom");
+           ListeSQL listeSQL = new ListeSQL();
+           listeSQL.delete(nom);
 
-        ArrayList<Liste> listes;
-        listes = listeSQL.selectAll();
-        request.setAttribute("listes", listes);
+           ArrayList<Liste> listes;
+           listes = listeSQL.selectAll();
+           request.setAttribute("listes", listes);
+       }
+
 
         request.getRequestDispatcher("WEB-INF/index.jsp").forward(request,response);
     }

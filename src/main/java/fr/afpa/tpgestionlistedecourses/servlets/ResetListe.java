@@ -13,17 +13,20 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@WebServlet(name = "AfficherListe", value = "/AfficherListe")
-public class AfficherListe extends HttpServlet {
+@WebServlet(name = "ResetListe", value = "/ResetListe")
+public class ResetListe extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Liste liste;
         ListeSQL listeSQL = new ListeSQL();
         liste = listeSQL.selectOne(Integer.parseInt(request.getParameter("ID_liste")));
         ArticleListeSQL articleListeSQL = new ArticleListeSQL();
-        ArrayList<ListeArticle> listeArticles = articleListeSQL.selectOneList(liste.getID_liste());
         ArticleSQL articleSQL = new ArticleSQL();
         ArrayList<Article> articles = articleSQL.selectAll();
+        articleListeSQL.resetAll(liste);
+
+        ArrayList<ListeArticle> listeArticles = articleListeSQL.selectOneList(liste.getID_liste());
+        System.out.println("coucou");
         request.setAttribute("liste",liste);
         request.setAttribute("articles",articles);
         request.setAttribute("listearticles" ,listeArticles);
@@ -32,20 +35,6 @@ public class AfficherListe extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Liste liste;
-        ListeSQL listeSQL = new ListeSQL();
-        liste = listeSQL.selectOne(Integer.parseInt(request.getParameter("ID_liste")));
-        ArticleListeSQL articleListeSQL = new ArticleListeSQL();
-        ArticleSQL articleSQL = new ArticleSQL();
-        ArrayList<Article> articles = articleSQL.selectAll();
-        ListeArticle listeArticle = articleListeSQL.selectOne(Integer.parseInt(request.getParameter("ID_liste")),Integer.parseInt(request.getParameter("ID_article")));
-        articleListeSQL.update(listeArticle);
 
-        ArrayList<ListeArticle> listeArticles = articleListeSQL.selectOneList(liste.getID_liste());
-        System.out.println("coucou");
-        request.setAttribute("liste",liste);
-        request.setAttribute("articles",articles);
-        request.setAttribute("listearticles" ,listeArticles);
-        request.getRequestDispatcher("WEB-INF/Afficher.jsp").forward(request,response);
     }
 }

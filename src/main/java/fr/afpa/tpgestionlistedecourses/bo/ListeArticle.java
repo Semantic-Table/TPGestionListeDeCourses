@@ -8,4 +8,5 @@ import lombok.Data;
 public class ListeArticle {
     private int ID_liste;
     private int ID_article;
+    private boolean actif;
 }

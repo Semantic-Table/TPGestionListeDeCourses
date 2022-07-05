@@ -2,6 +2,7 @@ package fr.afpa.tpgestionlistedecourses.dal;
 
 import fr.afpa.tpgestionlistedecourses.bo.Article;
 import fr.afpa.tpgestionlistedecourses.bo.Liste;
+import fr.afpa.tpgestionlistedecourses.exceptions.VideException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,14 +20,21 @@ public class ListeSQL {
                     "SELECT ID_liste, nom FROM liste"
             );
             ResultSet rs = pstmt.executeQuery();
+
+
             while (rs.next()) {
+
                 listes.add(new Liste(
                         rs.getInt("ID_liste"), rs.getString("nom")
                 ));
             }
+            rs.close();
+            connection.close();
+            pstmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        System.out.println(listes);
         return listes;
     }
 
@@ -40,9 +48,14 @@ public class ListeSQL {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Liste liste = new Liste(rs.getInt("ID_liste"), rs.getString("nom"));
+                rs.close();
+                connection.close();
+                pstmt.close();
                 return liste;
             }
-
+            rs.close();
+            connection.close();
+            pstmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -59,9 +72,14 @@ public class ListeSQL {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Liste liste = new Liste(rs.getInt("ID_liste"), rs.getString("nom"));
+                rs.close();
+                connection.close();
+                pstmt.close();
                 return liste;
             }
-
+            rs.close();
+            connection.close();
+            pstmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -77,16 +95,24 @@ public class ListeSQL {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Liste liste = new Liste(rs.getInt("ID_liste"), rs.getString("nom"));
+                rs.close();
+                connection.close();
+                pstmt.close();
                 return liste;
             }
-
+            rs.close();
+            connection.close();
+            pstmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return null;
     }
 
-    public void insert(String nom) {
+    public void insert(String nom) throws VideException {
+        if (nom.equals("")){
+            throw new VideException("nom vide");
+        }
         try {
             Connection connection = ConnectionProvider.getConnection();
 
@@ -95,6 +121,8 @@ public class ListeSQL {
             );
             pstmt.setString(1, nom);
             pstmt.executeUpdate();
+            connection.close();
+            pstmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -111,6 +139,8 @@ public class ListeSQL {
             );
             pstmt.setString(1, nom);
             pstmt.executeUpdate();
+            connection.close();
+            pstmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -2,6 +2,7 @@ package fr.afpa.tpgestionlistedecourses.dal;
 
 import fr.afpa.tpgestionlistedecourses.bo.Article;
 import fr.afpa.tpgestionlistedecourses.bo.Liste;
+import fr.afpa.tpgestionlistedecourses.exceptions.VideException;
 
 
 import java.sql.Connection;
@@ -24,28 +25,13 @@ public class ArticleSQL {
                         rs.getInt("ID_article"), rs.getString("nom")
                 ));
             }
+            rs.close();
+            connection.close();
+            pstmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return articles;
-    }
-    public Article selectOne(int ID_article) {
-        try {
-            Connection connection = ConnectionProvider.getConnection();
-            PreparedStatement pstmt = connection.prepareStatement(
-                    "SELECT ID_article, nom FROM article where ID_article = ?"
-            );
-            pstmt.setInt(1, ID_article);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                Article article = new Article(rs.getInt("ID_article"), rs.getString("nom"));
-                return article;
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
     }
 
     public Article selectOne(String nom) {
@@ -58,9 +44,14 @@ public class ArticleSQL {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Article article = new Article(rs.getInt("ID_article"), rs.getString("nom"));
+                rs.close();
+                connection.close();
+                pstmt.close();
                 return article;
             }
-
+            rs.close();
+            connection.close();
+            pstmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -76,15 +67,23 @@ public class ArticleSQL {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Article article = new Article(rs.getInt("ID_article"), rs.getString("nom"));
+                rs.close();
+                connection.close();
+                pstmt.close();
                 return article;
             }
-
+            rs.close();
+            connection.close();
+            pstmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return null;
     }
-    public void insert(String nom) {
+    public void insert(String nom) throws VideException {
+        if (nom.equals("")){
+            throw new VideException("nom vide");
+        }
         try {
             Connection connection = ConnectionProvider.getConnection();
 
@@ -93,10 +92,28 @@ public class ArticleSQL {
             );
             pstmt.setString(1, nom);
             pstmt.executeUpdate();
+            connection.close();
+            pstmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
 
+    }
+
+    public void delete(String nom) {
+        try {
+            Connection connection = ConnectionProvider.getConnection();
+
+            PreparedStatement pstmt = connection.prepareStatement(
+                    "DELETE FROM article WHERE nom = ?"
+            );
+            pstmt.setString(1, nom);
+            pstmt.executeUpdate();
+            connection.close();
+            pstmt.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
