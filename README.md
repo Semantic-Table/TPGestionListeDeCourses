@@ -1,6 +1,7 @@
 # Gestion de listes de courses
 
 Serveur : Tomcat 9
+
 lancer le script.txt dans une console mySQL pour creer la DB
 
 ## Accueil
